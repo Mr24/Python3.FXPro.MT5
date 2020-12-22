@@ -5,25 +5,20 @@
 #//|                                                 Since:2018.03.05 |
 #//|                                Released under the Apache license |
 #//|                       https://opensource.org/licenses/Apache-2.0 |
-#//|        "VsV.Py3.FxPro.MT5.main.py - Ver.0.0.2 Update:2020.12.23" |
+#//|     "VsV.Py3.FxPro.MT5.settion.py - Ver.0.0.2 Update:2020.12.23" |
 #//+------------------------------------------------------------------+
 import json
 
-import MetaTrader5 as mt5
-import FxPro.settion as fxproSettion
+
+### JSON.Load : fxpro_config.json ###
+with open("FxPro/fxpro_config.json", encoding='utf-8') as f:
+    fxpro_dict = json.load(f)
 
 ### Demo.Settion : Setup ###
-DemoID = fxproSettion.DemoID
-DemoPW = fxproSettion.DemoPW
-FxServer = fxproSettion.FxServer
+DemoID = fxpro_dict['DemoID']
+DemoPW = fxpro_dict['DemoPassword']
+FxServer = fxpro_dict['FxProServer']
 
-### MT5.Settion : Setup ###
-if not mt5.initialize(login=DemoID, password=DemoPW, server=FxServer):
-    print("initialize() failed")
-    mt5.shutdown()
-
-print(mt5.terminal_info())
-
-print(mt5.version())
-
-mt5.shutdown()
+### Live. Settion : Setup ###
+# LiveID = fxpro_dict['LiveID']
+# LivePW = fxpro_dict['LivePassword']
