@@ -5,7 +5,7 @@
 #//|                                                 Since:2018.03.05 |
 #//|                                Released under the Apache license |
 #//|                       https://opensource.org/licenses/Apache-2.0 |
-#//|     "VsV.Py3.FxPro.MT5.settion.py - Ver.0.0.2 Update:2020.12.23" |
+#//|     "VsV.Py3.FxPro.MT5.session.py - Ver.0.0.3 Update:2020.12.23" |
 #//+------------------------------------------------------------------+
 import json
 
