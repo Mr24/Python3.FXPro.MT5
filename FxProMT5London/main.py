@@ -5,7 +5,7 @@
 #//|                                                 Since:2018.03.05 |
 #//|                                Released under the Apache license |
 #//|                       https://opensource.org/licenses/Apache-2.0 |
-#//|        "VsV.Py3.FxPro.MT5.main.py - Ver.0.0.3 Update:2020.12.23" |
+#//|        "VsV.Py3.FxPro.MT5.main.py - Ver.0.0.4 Update:2020.12.23" |
 #//+------------------------------------------------------------------+
 #//|                                   PyCharm : PlugIn - AWS ToolKit |
 #//|                               https://aws.amazon.com/jp/pycharm/ |
@@ -18,16 +18,16 @@ import boto3 as b3
 import mysql.connector as mConn
 
 import FxPro.session as fxproSession
-
+import AWS.mysql as rdsSession
 
 
 ### AWS.MySQL.Session : Setup ###
-ENDPOINT = "xxxx.xxxx.eu-west-2.rds.amazonaws.com" # AWS.RDS.MySQL:EndPoint
-PORT = "3306"
-USR = "xxxxxx"			# AWS.RDS.MySQL:UserName
-PW = "xxxxxx"			# AWS.RDS.MySQL:PassWord
-REGION = "eu-west-2"
-DBNAME = "xxxxxx"		# AWS.RDS.MySQL:Database Name
+ENDPOINT = rdsSession.ENDPOINT
+PORT = rdsSession.PORT
+USR = rdsSession.USR
+PW = rdsSession.PW
+REGION = rdsSession.REGION
+DBNAME = rdsSession.DBNAME
 os.environ['LIBMYSQL_ENABLE_CLEARTEXT_PLUGIN'] = '1'
 
 ## AWS.MySQL.Session : Get Token ###
