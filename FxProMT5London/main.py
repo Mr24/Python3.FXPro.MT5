@@ -5,13 +5,14 @@
 #//|                                                 Since:2018.03.05 |
 #//|                                Released under the Apache license |
 #//|                       https://opensource.org/licenses/Apache-2.0 |
-#//|        "VsV.Py3.FxPro.MT5.main.py - Ver.0.1.1 Update:2021.01.14" |
+#//|        "VsV.Py3.FxPro.MT5.main.py - Ver.0.1.2 Update:2021.01.23" |
 #//+------------------------------------------------------------------+
 #//|                                   PyCharm : PlugIn - AWS ToolKit |
 #//|                               https://aws.amazon.com/jp/pycharm/ |
 #//+------------------------------------------------------------------+
 import json
 import pandas as pd
+from datetime import datetime
 
 import MetaTrader5 as mt5
 import FxPro.session as fxproSession
@@ -27,8 +28,20 @@ if __name__ == "__main__":
         mt5.shutdown
 
     ## MT5.Session : Accont_Info
-    balance = mt5_cli.get_balance()
-    print(balance.currency, balance.available)
+    Balance = mt5_cli.get_balance()
+    print(Balance.currency, Balance.available)
+
+    ## MT5.Session : Copy_Ticks_From
+    Ticks_From = mt5_cli.get_ticker("USDJPY")
+    # (Tick : Count)
+    # cnt = 0
+    # for tick in Ticks_From:
+    #    cnt += 1
+    #    print(tick)
+
+    print(Ticks_From.product_code, Ticks_From.timestamp, Ticks_From.bid, Ticks_From.ask, Ticks_From.volume)
+    # print(Ticks_From.timestamp)
+    # print(Ticks_From.bid)
 
 ### MT5.Demo.Session : Setup ###
 # DemoID = fxproSession.DemoID
