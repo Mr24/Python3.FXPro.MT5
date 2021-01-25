@@ -5,7 +5,7 @@
 #//|                                                 Since:2018.03.05 |
 #//|                                Released under the Apache license |
 #//|                       https://opensource.org/licenses/Apache-2.0 |
-#//|        "VsV.Py3.FxPro.MT5.util.py - Ver.0.1.3 Update:2021.01.25" |
+#//|        "VsV.Py3.FxPro.MT5.util.py - Ver.0.1.4 Update:2021.01.25" |
 #//+------------------------------------------------------------------+
 import logging
 from datetime import datetime
@@ -74,7 +74,8 @@ class MT5Client(object):
         # timestamp = symbol_info_tick['time_msc']
         bid = symbol_info_tick['bid']
         ask = symbol_info_tick['ask']
-        volume = symbol_info_tick['volume_real']
+        volume = self.get_candle_volume(Product_Code, "1M", 1)
+        # volume = symbol_info_tick['volume_real']
         '''
         all = list()
         all = all.addend(bid)
@@ -83,3 +84,9 @@ class MT5Client(object):
         '''
         return Ticker(Product_Code, timestamp, bid, ask, volume)
 
+    def get_candle_volume(self, Product_Code, granularity, count):
+        granularity_code = MT5Cons.TRADE_MAP[granularity]['granularity']
+        copy_rates_from_pos = mt5.copy_rates_from_pos(Product_Code, granularity_code, 0, count)
+        # copy_rates_from_pos = mt5.copy_rates_from_pos(Product_Code, mt5.TIMEFRAME_M1, 0, 1)
+        volume = copy_rates_from_pos['tick_volume']
+        return volume
