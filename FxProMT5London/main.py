@@ -5,7 +5,7 @@
 #//|                                                 Since:2018.03.05 |
 #//|                                Released under the Apache license |
 #//|                       https://opensource.org/licenses/Apache-2.0 |
-#//|        "VsV.Py3.FxPro.MT5.main.py - Ver.0.1.3 Update:2021.01.25" |
+#//|        "VsV.Py3.FxPro.MT5.main.py - Ver.0.1.5 Update:2021.02.05" |
 #//+------------------------------------------------------------------+
 #//|                                   PyCharm : PlugIn - AWS ToolKit |
 #//|                               https://aws.amazon.com/jp/pycharm/ |
@@ -36,6 +36,7 @@ if __name__ == "__main__":
     print(Ticker.truncate_date_time('1M'))
     print(Ticker.truncate_date_time('1H'))
     print(Ticker.mid_price)
+    print(Ticker.stream_tick)
 
 ### MT5.Demo.Session : Setup ###
 # DemoID = fxproSession.DemoID
