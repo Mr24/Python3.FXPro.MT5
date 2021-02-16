@@ -5,10 +5,13 @@
 #//|                                                 Since:2018.03.05 |
 #//|                                Released under the Apache license |
 #//|                       https://opensource.org/licenses/Apache-2.0 |
-#//|        "VsV.Py3.FxPro.MT5.util.py - Ver.0.1.6 Update:2021.02.16" |
+#//|        "VsV.Py3.FxPro.MT5.util.py - Ver.0.1.7 Update:2021.02.16" |
 #//+------------------------------------------------------------------+
 #//|                                           khramkov/MQL5-JSON-API |
 #//|                        https://github.com/khramkov/MQL5-JSON-API |
+#//+------------------------------------------------------------------+
+#//|                                           Python/Threading.Timer |
+#//|                    https://ja.stackoverflow.com/questions/24508/ |
 #//+------------------------------------------------------------------+
 import logging
 from datetime import datetime
@@ -19,6 +22,8 @@ import MT5.constants as MT5Cons
 
 import zmq
 import threading
+import time
+from threading import Timer
 
 
 logger = logging.getLogger(__name__)
@@ -283,6 +288,42 @@ class Ticker(object):
         # return rep
 
 
+    def re_tick(self, Product_Code):
+        t = RepeatedTimer(0.0001, _t_ticker, [Product_Code])
+        t.start()
+        # time.sleep(0.01)
+        # t.cancel()
+
+        while True:
+            pass
+
+        # now = time.time()
+        # t = threading.Timer(1, _t_ticker)
+        # t = threading.Thread(target=_t_ticker(), daemon=True)
+        # t.start()
+        # t.join()
+        # wait_time = time_interval - ( (time.time() - now) % time_interval)
+        # time.sleep(wait_time)
+
+
+class RepeatedTimer(Timer):
+    def __init__(self, interval, function, args=[], kwargs={}):
+        Timer.__init__(self, interval, self.run, args, kwargs)
+        self.thread = None
+        self.function = function
+
+    def run(self):
+        self.thread = Timer(self.interval, self.run)
+        self.thread.start()
+        self.function(*self.args, **self.kwargs)
+
+    def cancel(self):
+        if self.thread is not None:
+            self.thread.cancel()
+            self.thread.join()
+            del self.thread
+
+
 def _t_livedata():
     api = MTraderAPI()
     socket = api.live_socket()
@@ -307,6 +348,16 @@ def _t_streaming_events():
         print(reply)
         # return request, reply
 
+def _t_ticker(Product_Code):
+    symbol_info_tick = mt5.symbol_info_tick(Product_Code)._asdict()
+    # symbol_info_tick = mt5.symbol_info_tick('USDJPY')._asdict()
+    timestamp = symbol_info_tick['time']
+    bid = symbol_info_tick['bid']
+    ask = symbol_info_tick['ask']
+
+    print(Product_Code, timestamp, bid, ask)
+    # print('USDJPY', timestamp, bid, ask)
+    # print(symble, timestamp, bid, ask)
 
 
 class MT5Client(object):

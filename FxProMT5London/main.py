@@ -5,7 +5,7 @@
 #//|                                                 Since:2018.03.05 |
 #//|                                Released under the Apache license |
 #//|                       https://opensource.org/licenses/Apache-2.0 |
-#//|        "VsV.Py3.FxPro.MT5.main.py - Ver.0.1.6 Update:2021.02.16" |
+#//|        "VsV.Py3.FxPro.MT5.main.py - Ver.0.1.7 Update:2021.02.16" |
 #//+------------------------------------------------------------------+
 #//|                                   PyCharm : PlugIn - AWS ToolKit |
 #//|                               https://aws.amazon.com/jp/pycharm/ |
@@ -20,6 +20,9 @@ import MetaTrader5 as mt5
 import FxPro.session as fxproSession
 from MT5.util import MT5Client
 from MT5 import util
+
+import threading
+import time
 
 
 ### MT5.Demo : Default.Setup ###
@@ -41,9 +44,19 @@ if __name__ == "__main__":
     print(Ticker.truncate_date_time('1H'))
     print(Ticker.mid_price)
 
+    Ticker.re_tick("USDJPY")
+
+    # mt5_cli.thread_ticker()
+    # mt5_cli.thread_ticker()
+    # t = threading.Thread(target=mt5_cli.thread_ticker, args="")
+    # t.start()
+
+    # tTick = mt5_cli.thread_ticker("USDJPY")
+    # print(tTick.product_code, tTick.timestamp, tTick.bid, tTick.ask, tTick.volume)
+
     # print(Ticker.stream_tick)
     # print(util._t_livedata())
-    Ticker.stream_tick()
+    # (Ver.0.1.6-OK) Ticker.stream_tick()
 
 ### MT5.Demo.Session : Setup ###
 # DemoID = fxproSession.DemoID
