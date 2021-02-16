@@ -5,7 +5,10 @@
 #//|                                                 Since:2018.03.05 |
 #//|                                Released under the Apache license |
 #//|                       https://opensource.org/licenses/Apache-2.0 |
-#//|        "VsV.Py3.FxPro.MT5.util.py - Ver.0.1.5 Update:2021.02.05" |
+#//|        "VsV.Py3.FxPro.MT5.util.py - Ver.0.1.6 Update:2021.02.16" |
+#//+------------------------------------------------------------------+
+#//|                                           khramkov/MQL5-JSON-API |
+#//|                        https://github.com/khramkov/MQL5-JSON-API |
 #//+------------------------------------------------------------------+
 import logging
 from datetime import datetime
@@ -15,6 +18,7 @@ import MetaTrader5 as mt5
 import MT5.constants as MT5Cons
 
 import zmq
+import threading
 
 
 logger = logging.getLogger(__name__)
@@ -33,6 +37,9 @@ class MTraderAPI:
         # ZeroMQ timeout in seconds
         sys_timeout = 1
         data_timeout = 10
+
+        # sys_timeout = 1
+        # data_timeout = 10
 
         # initialise ZMQ context
         context = zmq.Context()
@@ -256,14 +263,50 @@ class Ticker(object):
 
     @property
     def stream_tick(self):
-        api = MTraderAPI()
-        rep = api.construct_and_send(action="ACCOUNT")
+
+        t = threading.Thread(target=_t_livedata, daemon=True)
+        t.start()
+
+        t = threading.Thread(target=_t_streaming_events, daemon=True)
+        t.start()
+
+        while True:
+            pass
+
+        # api = MTraderAPI()
+        # rep = api.construct_and_send(action="ACCOUNT")
         # rep = api.construct_and_send(action="CONFIG", symbol="USDJPY", chartTF="M1")
         # rep = api.construct_and_send(action="HISTORY", actionType="DATA", symbol="USDJPY", chartTF="M5", fromDate="1612557509")
         # rep = api.construct_and_send(action="CONFIG", symbol="USDJPY", chartTF="TICK")
         # rep = api.construct_and_send(action="RESET")
 
-        return rep
+        # return rep
+
+
+def _t_livedata():
+    api = MTraderAPI()
+    socket = api.live_socket()
+    while True:
+        try:
+            last_candle = socket.recv_json()
+        except zmq.ZMQError:
+            raise zmq.NotDone("Live data ERROR")
+        print(last_candle)
+        # return last_candle
+
+def _t_streaming_events():
+    api = MTraderAPI()
+    socket = api.streaming_socket()
+    while True:
+        try:
+            trans = socket.recv_json()
+            request, reply = trans.values()
+        except zmq.ZMQError:
+            raise zmq.NotDone("Streaming data ERROR")
+        print(request)
+        print(reply)
+        # return request, reply
+
 
 
 class MT5Client(object):
